@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deftere</title>
+
+<link id="ic"  rel="shortcut icon" href = "icons/kudhol1.svg" type="images/png" >	
+</head>
+<body>
+<style>
+	#btn{ border-color:#fff; padding: 2px ; padding-left: 4px; padding-right: 4px; }
+	.query{color:#08f;}
+    .nested {
+      margin-left: 20px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+      font-size:13px;
+    }
+   #input-box{
+	   	display: flex;
+	    flex-direction: column;
+   }
+
+  p{
+  	font-family:Verdana, BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", "sans-serif" ;
+  }
+
+  #suggestions{
+   	font-family:Verdana, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif ;
+ 	
+  }
+
+
+
+</style>
+<p>DEFTERE TIMMUNDE FOF KO DICTIONNAIRE</p>
+<p id = "dictionnaire"><input id="input" type="search" placeholder="  uinndu << KUDHOL >> " ><button id = "submit">search</button>
+</p>
+<div id="suggestions" class="suggestions"></div>
+<div id = "page" style='font-family: Arial, sans-serif;'>DICTIONNAIRE</div>
+
+<script>
+
+/**
+font-family: Arial - Helvetica - Times New Roman - Georgia - Verdana - Courier New ...
+Verdana, BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+
+font-weight: normal - bold - 100 - 900 - ...
+**/
+
+//H P U : Hannde Pulaar Uiy
+// parodie Docteur Diallo , dictcore / ligne 1309 
+//sittu moddi , satta moddi dictcore / ligne 1469
+
+function index( phr , word ){
+	var n = 0;
+	for ( p of phr ){
+		if(p == word){return n + 1e+12;}
+		n += 1;
+	}
+}
+
+function search( query ){
+	n = 0;
+	var phrases = [[ index( [query], query ), query, n]];
+	for ( phrase of liste ){
+		n += 1 ;
+		var phr = phrase.toLowerCase().split(' ');
+		if( phr.includes( query )){
+			phrases.push([ index( phr , query ), phrase.slice(0,-1), n]);
+		}
+	}
+	return phrases.sort();
+}
+
+function Submit(b){
+	b.innerHTML = document.getElementById( "input").value;
+	find( b );
+	b.innerHTML = "submit";
+}
+
+function Add( condition ){
+	if ( condition ){ return `` }
+	return `class = "query"`;
+}
+
+function Split( paragraphe , query ){
+		innerHTML = ``;
+		for( word of paragraphe.split(' ') ){
+			to_add = Add( word.toLowerCase() != query )
+			innerHTML += `<button id = "btn" ${to_add} >${word}</button>`;
+		}
+		return innerHTML;
+}
+
+
+function paragraphes( phrases , query ){
+	var paragraphes = `<details>
+	<summary><button id = "back">...back</button><button id = "next">next...</button></summary>
+	<div class = 'nested'> ...caggal / ieeso...</div>
+	<div class = 'nested'><input id = 'input-box' type = 'text'></div>
+	</details>`;
+	for ( phrase of phrases ){
+		paragraphes += `
+		<details>
+		<summary>${ Split( phrase[1] , query )}</summary>
+		<div class = 'nested'>${phrase[1]}  (ligne ${phrase[2]})</div>
+		<div class = 'nested'><input id = 'input-box' type = 'text' placeholder = 'comment...'></div>
+	</details>`;
+	}
+	return paragraphes;
+}
+
+function fill( phrases , indexes , query ){
+	const page = document.getElementById( "page" );
+	display = phrases.slice( indexes * lines , (indexes+1) * lines )
+	page.innerHTML = paragraphes( display , query );
+	b = document.getElementById("back");
+	b.addEventListener( "click", function(){ prev_page( phrases , indexes , query );});
+	b = document.getElementById("next");
+	b.addEventListener( "click", function(){ next_page( phrases , indexes , query );});
+
+	for ( b of document.querySelectorAll("#btn") ){
+		b.addEventListener( "click", function(){ find(this);});
+	}
+}
+
+
+function find( button ){
+	query = button.innerHTML.toLowerCase();
+	input = document.getElementById( "input");
+	input.value = query;
+	phrases = search( query); // ko dhooyenne
+	fill( phrases , indexes , query );
+
+}
+
+function next_page( phrases , indexes , query ){
+	if ( indexes * lines >= phrases.length ){return false;}
+	fill( phrases , indexes + 1 , query );
+}
+function prev_page( phrases , indexes , query ){
+	if ( indexes < 1 ){return false;}
+	fill( phrases , indexes - 1 , query );
+}
+
+
+
+
+reporg = [['Ƴƴ', 'Jjh'], ['Ŋŋ', 'Qq'], ['Ňň', 'Nny'], ['Ññ', 'Nny'], ['Ɓɓ', 'Bbh'], ['Ɗɗ', 'Ddh'], ['Ɠɠ', 'Ggh'], ['Ƴ', 'Jh'], ['Ŋ', 'Q'], ['Ň', 'Ny'], ['Ñ', 'Ny'], ['Ɓ', 'Bh'], ['Ɗ', 'Dh'], ['Ɠ', 'Gh'], ['Aa', 'Â'], ['Oo', 'Ô'], ['Ii', 'Î'], ['Ee', 'Ê'], ['Uu', 'Û'], ['Yi', 'Y'], ['Yî', 'Ŷ'], ['Wu', 'W'], ['Wû', 'Ŵ'], [' Ji ', ' J '], ['ude ', 'ud '], ['ngol ', 'qol '], ['ngal ', 'qal '], ['ngel ', 'qel '], [' So ', ' S '], [' To ', ' T '], [' No ', ' N '], [' Fii ', ' F '], [' Ngam ', ' Q '], [' Hol ', ' H '],
+];
+
+
+
+//var texte = "";
+var liste = "";
+var phrases = "";
+var indexes = 0;
+var lines = 10
+filename = "data/dictcore.txt"
+fetch(filename).then(response => {
+	console.log( filename)
+//fetch("dictionnaire.json").then(response => {
+    if (!response.ok) throw new Error('Erreur réseau');
+    
+    //return response.json();
+    return response.text();
+  }).then(data => {
+		  	const texte = data;
+				//liste = texte;
+				liste = texte.split('\n');
+				button = document.getElementById("submit")
+				button.addEventListener( "click", function(){ Submit(this);});
+				input = document.getElementById("input")
+				input.addEventListener("keydown", function(e) {if (e.key === "Enter") {Submit(button);}})
+
+    //const liste_of_words = ["apple", "banana", "grape", "orange", "pear", "peach", "plum"];
+
+	const lst = texte.split(" ")//.slice(0,50)
+	const lste = new Set( lst );
+	var liste_of_words = [];
+	//i = 0;
+	for ( v of lste ){
+		liste_of_words.push( v )
+		//if (i<100){i++}else{break;}
+	}
+	//console.log( liste_of_words );
+
+    const suggestions = document.getElementById("suggestions");
+
+
+    input.addEventListener("input", () => {
+      const value = input.value.toLowerCase();
+      suggestions.innerHTML = "";
+      if (value) {
+        const filtered = liste_of_words.filter(word => word.startsWith(value)).slice(0,20);
+        filtered.forEach(word => {
+          const div = document.createElement("div");
+          div.textContent = word;
+          div.onclick = () => { input.value = word; suggestions.innerHTML = ""; };
+          suggestions.appendChild(div);
+        });
+      }
+    });
+
+
+
+let selectedIndex = -1;
+
+input.addEventListener("keydown", (e) => {
+  const items = suggestions.querySelectorAll("div");
+  if (items.length === 0) return;
+
+  if (e.key === "ArrowDown") {
+    selectedIndex = (selectedIndex + 1) % items.length;
+    updateSelection(items);
+    e.preventDefault();
+  } else if (e.key === "ArrowUp") {
+    selectedIndex = (selectedIndex - 1 + items.length) % items.length;
+    updateSelection(items);
+    e.preventDefault();
+  } else if (e.key === "Enter" && selectedIndex >= 0) {
+    input.value = items[selectedIndex].textContent;
+    suggestions.innerHTML = "";
+    selectedIndex = -1;
+    e.preventDefault();
+  }
+});
+
+function updateSelection(items) {
+  items.forEach((item, i) => {
+    item.style.background = i === selectedIndex ? "#eee" : "";
+  });
+}
+
+
+
+
+
+  }).catch(err => console.error(err));
+
+
+
+
+</script>
+
+</body>
+</html>
