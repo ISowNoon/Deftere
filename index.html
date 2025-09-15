@@ -49,10 +49,6 @@ Verdana, BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, 
 font-weight: normal - bold - 100 - 900 - ...
 **/
 
-//H P U : Hannde Pulaar Uiy
-// parodie Docteur Diallo , dictcore / ligne 1309 
-//sittu moddi , satta moddi dictcore / ligne 1469
-
 function index( phr , word ){
 	var n = 0;
 	for ( p of phr ){
@@ -99,14 +95,12 @@ function paragraphes( phrases , query ){
 	var paragraphes = `<details>
 	<summary><button id = "back">...back</button><button id = "next">next...</button></summary>
 	<div class = 'nested'> ...caggal / ieeso...</div>
-	<div class = 'nested'><input id = 'input-box' type = 'text'></div>
 	</details>`;
 	for ( phrase of phrases ){
 		paragraphes += `
 		<details>
 		<summary>${ Split( phrase[1] , query )}</summary>
 		<div class = 'nested'>${phrase[1]}  (ligne ${phrase[2]})</div>
-		<div class = 'nested'><input id = 'input-box' type = 'text' placeholder = 'comment...'></div>
 	</details>`;
 	}
 	return paragraphes;
@@ -247,4 +241,5 @@ function updateSelection(items) {
 
 </body>
 </html>
+
 
