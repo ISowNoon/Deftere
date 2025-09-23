@@ -18,12 +18,12 @@
 <div id = "main"><p>PULAAR KO DHOO IAHRATEE</p></div>
 
 <style>
-	#btn-menu { border-color:#fff; padding: 8px ; padding-left: 8px; padding-right: 8px; border: none; outline: none;	}
+		#btn-menu { border-color:#fff; padding: 8px ; padding-left: 8px; padding-right: 8px; border: none; outline: none;	}
     ul {
       list-style: none; 
       margin: 0;
       padding: 0;
-      display: flex; 
+      display: flex;
       background: #fff;
     }
     li {
@@ -32,23 +32,7 @@
 		 	font-family:Verdana, BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", "sans-serif" ;
 }
 
-#btn{ border-color:#fff; padding: 2px ; padding-left: 3px; padding-right: 3px; border: none; outline: none;	}
-.query{color:#08f;}
-.nested { margin-left: 0px; margin-top: 5px; margin-bottom: 5px; font-size:13px; }
-#input-box{ display: flex; flex-direction: column; }
-
 p{ font-family:Verdana, BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", "sans-serif" ; }
-
-#suggestions{	font-family:Verdana, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif ;}
-textarea {
-      width: 100%;
-      min-height: 100px;
-      resize: vertical; /* allows manual resize */
-      overflow-y: hidden; /* auto-resize vertically */
-    }
-
-
-
 </style>
 
 <script>
@@ -58,23 +42,17 @@ var variables = {
 	"dictionnaire":`
 <p>DICTIONNAIRE</p><p id = "dictionnaire"><input id="input" type="search" placeholder=" uinndu << KUDHOL >> " ><button id = "submit">search</button></p><div id = "page" style='font-family: Arial, sans-serif;'>DEFTERE TIMMUNDE FOF KO DICTIONNAIRE</div>
 <style id = "dictionnaire-style">
-
-#btn{ border-color:#fff; padding: 2px ; padding-left: 3px; padding-right: 3px; border: none; outline: none;	}
-.query{color:#08f;}
-.nested { margin-left: 0px; margin-top: 5px; margin-bottom: 5px; font-size:13px; }
-#input-box{ display: flex; flex-direction: column; }
-
-p{ font-family:Verdana, BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", "sans-serif" ; }
-
-#suggestions{	font-family:Verdana, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif ;}
-
+	#btn{ border-color:#fff; padding: 2px ; padding-left: 3px; padding-right: 3px; border: none; outline: none;	}
+	.query{color:#08f;}
+	.nested { margin-left: 0px; margin-top: 5px; margin-bottom: 5px; font-size:13px; }
+	#input-box{ display: flex; flex-direction: column; }
+	#suggestions{	font-family:Verdana, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif ;}
 </style>
 `,
 	"notes":`
 <p>NOTES</p>
 <textarea id="notesList" placeholder="Type here..."></textarea><br><br>
 <button onclick="downloadNotes()">Download Notes</button>
-
 <style id = "notes-style" >
     textarea {
       width: 100%;
@@ -82,15 +60,12 @@ p{ font-family:Verdana, BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, O
       resize: vertical; /* allows manual resize */
       overflow-y: hidden; /* auto-resize vertically */
     }
-p{ font-family:Verdana, BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", "sans-serif" ; }
 </style>
 `,
 	"deftere":`
 <p>DEFTE</p>
 <style id = "deftere-style">
-p{ font-family:Verdana, BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", "sans-serif" ; }
 </style>
-
 `,
 	//"notesList":[],
 	"notesList":"",
@@ -155,9 +130,9 @@ document.getElementById('main').innerHTML = variables['dictionnaire'];
 const submit = document.getElementById("submit");
 const input = document.getElementById("input");
 const suggestions = document.getElementById("page");
-submit.addEventListener( "click", function(){ Submit(this);});
+submit.addEventListener( "click", function(){ Submit(submit);});
 input.addEventListener("keydown", function(e) {if (e.key === "Enter") {
-	if (input.value){Submit(this);}else{Search_history();}
+	if (input.value){Submit(submit);}else{Search_history();}
 }});
 
 function Search_history(){
@@ -179,6 +154,7 @@ function Search_history(){
 
 input.addEventListener("input", () => {
 suggestions.innerHTML = "";
+//variables["page_index"] = -1;
 const value = input.value.toLowerCase();
   if (value) {
     const filtered = variables["liste_of_words"].filter(word => word.startsWith(value)).slice(0,20);
@@ -190,7 +166,7 @@ const value = input.value.toLowerCase();
       btn.addEventListener( "click", function(){ find(this);});
       suggestions.appendChild(btn);
     });
-  }
+  }else{Search_history();}
 });
 }
 	
@@ -316,6 +292,7 @@ fetch(filename).then(response => {
 
 </body>
 </html>
+
 
 
 
