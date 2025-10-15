@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,7 +19,9 @@
 <div id = "main"><p>PULAAR KO DHOO IAHRATEE</p></div>
 
 <style>
-		#btn-menu { border-color:#fff; padding: 8px ; padding-left: 8px; padding-right: 8px; border: none; outline: none;	}
+	button{background:#eee; }
+	button:hover{background:#ddd; outline: none;}
+		#btn-menu { border-color:#fff; padding: 8px ; padding-left: 8px; padding-right: 8px; border: none;}
     ul {
       list-style: none; 
       margin: 0;
@@ -42,7 +45,7 @@ var variables = {
 	"dictionnaire":`
 <p>DICTIONNAIRE</p><p id = "dictionnaire"><input id="input" type="search" placeholder=" uinndu << KUDHOL >> " ><button id = "submit">search</button></p><div id = "page" style='font-family: Arial, sans-serif;'>DEFTERE TIMMUNDE FOF KO DICTIONNAIRE</div>
 <style id = "dictionnaire-style">
-	#btn{ border-color:#fff; padding: 2px ; padding-left: 3px; padding-right: 3px; border: none; outline: none;	}
+	#btn{ border-color:#fff; padding: 2px ; padding-left: 3px; padding-right: 3px; border:None; outline: None; }
 	.query{color:#08f;}
 	.nested { margin-left: 0px; margin-top: 5px; margin-bottom: 5px; font-size:13px; }
 	#input-box{ display: flex; flex-direction: column; }
@@ -146,7 +149,7 @@ function Search_history(){
       btn.style.color = "#08f";
       btn.style.display = "block"; // each button on new line
       btn.id = "btn";
-      btn.addEventListener( "click", function(){ find(this);});
+      btn.addEventListener( "click", function(){ find(btn);});
       suggestions.appendChild(btn);
 	});
 	}
@@ -163,7 +166,7 @@ const value = input.value.toLowerCase();
       btn.textContent = word;
       btn.style.display = "block"; // each button on new line
       btn.id = "btn";
-      btn.addEventListener( "click", function(){ find(this);});
+      btn.addEventListener( "click", function(){ find(btn);});
       suggestions.appendChild(btn);
     });
   }else{Search_history();}
@@ -292,9 +295,5 @@ fetch(filename).then(response => {
 
 </body>
 </html>
-
-
-
-
 
 
