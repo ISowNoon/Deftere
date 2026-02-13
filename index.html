@@ -337,6 +337,7 @@ fetch(filename).then(response => {
   return response.text();
   }).then(data => {
 		texte = data;
+		console.log(texte.length);
 		//saveData( data );
   }).catch(err => console.error(err));
 /**/
@@ -370,6 +371,7 @@ picker.onchange = (e) => {
 
 </body>
 </html>
+
 
 
 
