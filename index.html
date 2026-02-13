@@ -336,7 +336,8 @@ fetch(filename).then(response => {
   if (!response.ok) throw new Error('Erreur réseau');
   return response.text();
   }).then(data => {
-		saveData( data );
+		texte = data;
+		//saveData( data );
   }).catch(err => console.error(err));
 /**/
 /*
@@ -354,7 +355,7 @@ picker.onchange = (e) => {
 };
 */
 
-	texte = loadData();
+	//texte = loadData();
 	//console.log(texte.length);
 	variables["texte"] = texte;
 	liste = texte.split('\n');
@@ -369,6 +370,7 @@ picker.onchange = (e) => {
 
 </body>
 </html>
+
 
 
 
