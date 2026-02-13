@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,9 +13,9 @@
 <ul>
     <li><button id = "btn-menu" class ="Dictionnaire" onclick="Dictionnaire_innitialize();">DICTIONNAIRE</button></li>
     <li><button id = "btn-menu" class = "Notes" onclick="Notes_innitialize()">NOTES</button></li>
-    <li><button id = "btn-menu" class = "Deftere" onclick="Deftere_innitialize()">DEFTERE</button></li>
+    <li><button id = "btn-menu" class = "Deftere" onclick="Deftere_innitialize()">DEFTE</button></li>
   </ul>
-<div id = "main"><p>PULAAR KO DHOO IAHRATEE</p></div>
+<div id = "main" class = "main"><p>PULAAR KO DHOO IAHRATEE</p></div>
 
 <style>
 	button{background:#eee; }
@@ -35,13 +34,16 @@
 		 	font-family:Verdana, BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", "sans-serif" ;
 }
 
-p{ font-family:Verdana, BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", "sans-serif" ; }
+p{ font-family:Verdana, BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", "sans-serif" ; 
+font-size: 13px;}
+textarea{font-family:Verdana, BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", "sans-serif" ;}
 </style>
 
 <script>
 
 var variables = {
-	"history":[],
+	"history":{},
+	"main":`<p>PULAAR KO DHOO IAHRATEE</p>`,
 	"dictionnaire":`
 <p>DICTIONNAIRE</p><p id = "dictionnaire"><input id="input" type="search" placeholder=" uinndu << KUDHOL >> " ><button id = "submit">search</button></p><div id = "page" style='font-family: Arial, sans-serif;'>DEFTERE TIMMUNDE FOF KO DICTIONNAIRE</div>
 <style id = "dictionnaire-style">
@@ -54,14 +56,27 @@ var variables = {
 `,
 	"notes":`
 <p>NOTES</p>
-<textarea id="notesList" placeholder="Type here..."></textarea><br><br>
-<button onclick="downloadNotes()">Download Notes</button>
+<div class="container">
+<div class="notes">
+	<textarea spellcheck="false" id="notes" placeholder="Type here..."></textarea>
+	<button onclick="downloadNotes()">Download Notes</button>
+	<button onclick="Convert('epulaar')">epulaar</button>
+	<button onclick="Convert('gpulaar')">gpulaar</button>
+	<button onclick="Convert('spulaar')">spulaar</button>
+	<button onclick="navigator.clipboard.writeText(document.getElementById('output').innerHTML.replaceAll('<br>','\n'))">copy text</button>
+</div>
+<div class="display"><p class = "epulaar" id = "output" >converted</p></div>
+</div>
 <style id = "notes-style" >
+		.container{
+			display:flex;
+		  height: 100%;
+		}
+		.notes{flex:1; }
+		.display{flex:1;}
     textarea {
-      width: 100%;
-      min-height: 100px;
-      resize: vertical; /* allows manual resize */
-      overflow-y: hidden; /* auto-resize vertically */
+      width: 98%;
+			height:90%;
     }
 </style>
 `,
@@ -70,27 +85,33 @@ var variables = {
 <style id = "deftere-style">
 </style>
 `,
-	//"notesList":[],
 	"notesList":"",
 	"defte":[],
 	"liste_of_words":[],
 }
 
-
 var texte = "";
 var liste = "";
-var set_of_words = "";
+//var set_of_words = "";
 var phrases = "";
-var indexes = 0;
 var lines = 10
 var filename = "dictionnaire.txt"
+const c1 = ["Jjh", "Bbh", "Ddh", "Ggh", "Jh", "Bh", "Dh", "Gh", "Qq", "Q", "Nny", "Ny"," '", "' ","'a","'en","'o","'on"]
+const c2 = ["Ƴƴ" , "Ɓɓ" , "Ɗɗ" , "Ɠɠ" , "Ƴ" , "Ɓ" , "Ɗ" , "Ɠ" , "Ŋŋ", "Ŋ", "Ññ" , "Ñ" ," ʽ", "ʼ ","ʼa","ʼen","ʼo","ʼon"]
+const v1 = ["Aa", "Oo", "Ii", "Ee", "Uu", "Yi", "YI", "Wu", "WU"]
+const v2 = ["Â" , "Ô" , "Î" , "Ê" , "Û" , "Ŷ" , "Ŷ" , "Ŵ" , "Ŵ" ]
+const vs = {
+		'epulaar':Inter([...c2,...v2], [...c1,...v1]),
+		'spulaar':Inter([...c1,...v1], [...c2,...v2]),
+		'gpulaar':Inter([...c1,...v2], [...c2,...v1])
+	}
 
 function Deftere_innitialize(){
-	document.getElementById('main').innerHTML = variables['deftere'];
+	main = document.getElementById('main').innerHTML = variables["deftere"];
 }
 
 function downloadNotes() {
-			textarea = document.getElementById( "notesList" );
+			textarea = document.getElementById( "notes" );
       const text = textarea.value;
       const blob = new Blob([text], { type: "text/plain" });
       const url = URL.createObjectURL(blob);
@@ -104,6 +125,7 @@ function downloadNotes() {
 }
 
 function AddToNotes(box){
+	
 	notesList = variables["notesList"];
 	variables["notesList"] = notesList + box.value + "\n";
 	console.log( variables["notesList"]);
@@ -111,25 +133,38 @@ function AddToNotes(box){
 
 function Notes_innitialize(){
 
-document.getElementById('main').innerHTML = variables['notes'];
+	document.getElementById('main').innerHTML = variables["notes"];
 
 	const notesList = variables["notesList"];
-
-	const textarea = document.getElementById("notesList");
+	const textarea = document.getElementById("notes");
 	textarea.innerHTML = notesList;
 	textarea.addEventListener("input", function() {
 		variables["notesList"] = textarea.value;
-	  this.style.height = "auto";
-	  this.style.height = this.scrollHeight + "px";
+	  //this.style.height = "auto";
+	  //this.style.height = this.scrollHeight + "px";
+		Convert('gpulaar');
 	});
-
 
 }
 
 
+		function Inter(X,Y){return X.map((x,i)=>{return[x, Y[i]];}); }
+
+
+
+	function Pulaar(n,x){
+		for (v of vs[n]){ x = x.replaceAll(v[0],v[1]) ; x = x.replaceAll(v[0].toLowerCase(),v[1].toLowerCase())}
+		return x.replaceAll("\n","<br>");
+	}
+	function Convert(pulaar){
+		text = Pulaar( pulaar , document.getElementById("notes").value );
+		document.getElementById("output").innerHTML = text;
+	}
+
 function Dictionnaire_innitialize(){
 
-document.getElementById('main').innerHTML = variables['dictionnaire'];
+document.getElementById('main').innerHTML = variables["dictionnaire"];
+
 const submit = document.getElementById("submit");
 const input = document.getElementById("input");
 const suggestions = document.getElementById("page");
@@ -143,11 +178,11 @@ function Search_history(){
 		const history = variables["history"];
 		if (!input.value){
 	  suggestions.innerHTML = "";
-    history.forEach(word => {
+    Object.keys(history).forEach(word => {
       const btn = document.createElement("button");
       btn.textContent = word;
       btn.style.color = "#08f";
-      btn.style.display = "block"; // each button on new line
+      //btn.style.display = "block"; // each button on new line
       btn.id = "btn";
       btn.addEventListener( "click", function(){ find(btn);});
       suggestions.appendChild(btn);
@@ -157,7 +192,6 @@ function Search_history(){
 
 input.addEventListener("input", () => {
 suggestions.innerHTML = "";
-//variables["page_index"] = -1;
 const value = input.value.toLowerCase();
   if (value) {
     const filtered = variables["liste_of_words"].filter(word => word.startsWith(value)).slice(0,20);
@@ -200,6 +234,7 @@ function search( query ){
 			phrases.push([ index( phr , query ), phrase.slice(0,-1), n]);
 		}
 	}
+
 	return phrases.sort();
 }
 
@@ -223,7 +258,6 @@ function Split( paragraphe , query ){
 		return innerHTML;
 }
 
-
 function paragraphes( phrases , query ){
 	var paragraphes = `<button id = "back">...caggal</button><button id = "next">ieeso...</button>`
 
@@ -231,19 +265,20 @@ function paragraphes( phrases , query ){
 		paragraphes += `
 		<details>
 		<summary>${ Split( phrase[1] , query )}</summary>
-		<textarea class 'nested' id = 'input-box' maxlength = '100' rows = '1' cols = '100' type = 'text' placeholder = "Xabc he pulaar / français ko Yabc / Zabc" ></textarea></details>`;
+		<button onclick="navigator.clipboard.writeText('${phrase[1]}')">copy phrase</button>
+		<textarea  spellcheck="false" class 'nested' id = 'input-box' maxlength = '100' rows = '1' cols = '100' type = 'text' placeholder = "Xabc he pulaar / français ko Yabc / Zabc" ></textarea></details>`;
 	}
 	return paragraphes;
 }
 
 function fill( phrases , indexes , query ){
 	const page = document.getElementById( "page" );
-	display = phrases.slice( indexes * lines , (indexes+1) * lines )
+	display = phrases.slice( indexes , indexes+lines )
 	page.innerHTML = paragraphes( display , query );
 	b = document.getElementById("back");
-	b.addEventListener( "click", function(){ prev_page( phrases , indexes , query );});
+	b.addEventListener( "click", function(){ prev_page( phrases , query );});
 	b = document.getElementById("next");
-	b.addEventListener( "click", function(){ next_page( phrases , indexes , query );});
+	b.addEventListener( "click", function(){ next_page( phrases , query );});
 
 	for ( b of document.querySelectorAll("#btn") ){
 		b.addEventListener( "click", function(){ find(this);});
@@ -256,44 +291,83 @@ function fill( phrases , indexes , query ){
 
 function find( button ){
 	query = button.innerHTML.toLowerCase();
-	variables["history"].push( query );
+	const history = variables["history"]
+	indexes = history[query];
+	if (indexes === undefined ){indexes=0;}
+	history[query] = indexes;
 	document.getElementById( "input").value = query;
 	phrases = search( query ); // ko dhooyenne
 	fill( phrases , indexes , query );
 
 }
 
-function next_page( phrases , indexes , query ){
-	if ( indexes * lines >= phrases.length ){return false;}
-	fill( phrases , indexes + 1 , query );
+function next_page( phrases , query ){
+	const history = variables["history"];
+	indexes = history[query] + lines;
+	if ( indexes-lines >= phrases.length ){return false;}
+	history[query] = indexes;
+	fill( phrases , indexes , query );
 }
-function prev_page( phrases , indexes , query ){
-	if ( indexes < 1 ){return false;}
-	fill( phrases , indexes - 1 , query );
+
+function prev_page( phrases , query ){
+	const history = variables["history"];
+	indexes = history[query] - lines;
+	if ( indexes+lines < 1 ){return false;}
+	history[query] = indexes;
+	fill( phrases , indexes , query );
 }
 
 
+function loadData(){
+  const raw = localStorage.getItem('dictionnaire');
+  if(!raw) return "";
+  try { return raw; } catch(e){ return ""; }
+}
+
+function saveData(data){
+	//localStorage.clear()
+	localStorage.setItem('dictionnaire', data );
+}
+
+	console.log(filename);
+/*
 fetch(filename).then(response => {
-	console.log( filename)
-    if (!response.ok) throw new Error('Erreur réseau');
-    
-    return response.text();
+  if (!response.ok) throw new Error('Erreur réseau');
+  return response.text();
   }).then(data => {
-		  	texte = data;
-				variables["texte"] = texte;
-				liste = texte.split('\n');
+		saveData( data );
+  }).catch(err => console.error(err));
+*/
+/*
+const picker = document.createElement('input');
+picker.type = 'file';
+document.getElementById("main").appendChild(picker);
+picker.onchange = (e) => {
+  const file = e.target.files[0];    // Get the file
+  const reader = new FileReader();   // Create the reader
+  reader.onload = () => {
+    data = reader.result;
+		saveData( data );
+  };
+  reader.readAsText(file);           // Start reading
+};
+*/
+
+	texte = loadData();
+	//console.log(texte.length);
+	variables["texte"] = texte;
+	liste = texte.split('\n');
 
 	const set_of_words = new Set( texte.split(" ") );
 	var liste_of_words = variables["liste_of_words"];
 	for ( v of set_of_words ){liste_of_words.push( v )}
-	console.log( variables["liste_of_words"].length);
-
-  }).catch(err => console.error(err));
+	//console.log( variables["liste_of_words"].length);
 
 
 </script>
 
 </body>
 </html>
+
 
 
